@@ -1,7 +1,7 @@
 Sistema Auxiliar de Mestre de RPG - Mini-Tarefa 1
 
 Identificacao da equipe
-Preencha aqui os nomes dos integrantes do grupo antes da entrega.
+Mathias Silva Cunha (Unico)
 
 Resumo da etapa atual
 Esta entrega implementa o modulo de cadastro de personagens em memoria para a Mini-Tarefa 1. O sistema permite cadastrar, consultar, alterar, remover e listar fichas, alem de administrar inventario, equipamentos, armas e atributos totais calculados a partir dos itens equipados.
