@@ -1,0 +1,397 @@
+MINI-TAREFA 1
+
+
+
+Os aventureiros
+Ficha de Personagem, inventário, equipamentos e mini-CRUD em C
+
+
+
+                   Algoritmos e Programação em C
+ DISCIPLINA
+                   Bacharelado em Ciência da Computação
+ CURSO
+                   Sistema Auxiliar de Mestre de RPG
+ PROJETO
+
+
+
+
+Visão do projeto
+Um sistema grande será construído por etapas pequenas, testáveis e reutilizáveis. Cada
+entrega resolve uma parte do problema e prepara a próxima.
+
+
+
+
+Nesta primeira etapa, o grupo construirá o módulo responsável pelas fichas dos person-
+agens. O objetivo não é apenas produzir um menu que “parece funcionar”, mas criar
+uma interface que proteja seus dados e possa ser incorporada ao sistema maior sem
+precisar ser refeita.
+Objetivo da etapa
+Construir o primeiro módulo do Sistema Auxiliar de Mestre de RPG: o cadastro dos per-
+sonagens. Ao concluir esta etapa, o programa deverá manter um grupo de fichas em
+memória, administrar os itens carregados por cada aventureiro e controlar seus equipa-
+mentos e armas.
+
+Conteúdos exercitados
+• tipos estruturados com struct;
+• vetores de estruturas;
+• funções e passagem de parâmetros;
+• manipulação de strings;
+• busca sequencial;
+• validação de dados;
+• composição de estruturas, com uma struct contendo outras estruturas;
+• capacidade limitada e cálculo de espaços ocupados;
+• modularização com arquivos .h e .c.
+
+Limites desta entrega
+Nesta primeira etapa, os dados permanecerão apenas em memória e será usado ar-
+mazenamento estático. Leitura de arquivos, alocação dinâmica, geração de encontros
+e combate pertencem às etapas posteriores.
+
+
+1 Ficha de Personagem fornecida
+Cada personagem deverá conter os campos abaixo. Os nomes dos campos em C po-
+dem ser escolhidos pela equipe, mas seu significado, tipo lógico e limites devem ser
+preservados.
+
+  Campo                Descrição                           Restrições
+  ID                   Identificador único do personagem   Inteiro positivo; não pode
+                                                           se repetir
+  Nome                 Nome do personagem                  1 a 49 caracteres úteis
+  Raça                 Povo ao qual o personagem per- No mínimo:     HUMANO,
+                       tence                          ELFO, ANAO e HALFLING
+  Classe               Função principal no grupo           No mínimo: GUERREIRO,
+                                                           LADINO, MAGO e CLERIGO
+  Nível                Experiência geral do aventureiro    Inteiro de 1 a 20
+  Pontos de vida       Limite de vida do personagem        Inteiro de 1 a 999
+  máximos
+  Pontos de vida at- Vida disponível no momento            Entre 0 e os PV máximos
+  uais
+  Ataque               Bônus usado em ataques              Inteiro de 0 a 30
+  Defesa               Dificuldade para ser atingido       Inteiro de 1 a 30
+  Iniciativa           Rapidez para agir                   Inteiro de -5 a 20
+
+Algoritmos e Programação em C                                                   Página 1
+  Campo                Descrição                           Restrições
+  Poder                Contribuição para estimar encon- Inteiro de 1 a 100
+                       tros
+
+O campo poder será usado futuramente pelo gerador de encontros. Nesta etapa, basta
+armazená-lo e validá-lo; nenhuma fórmula de combate deve ser criada.
+
+Classes e raças adicionais
+As opções apresentadas na tabela são o conjunto mínimo obrigatório. A equipe
+poderá incluir outras classes e raças. Toda opção acrescentada deverá ser representada
+no programa, aceita na leitura, validada e exibida corretamente. Não é suficiente aceitar
+um número arbitrário e tratá-lo como se fosse uma opção conhecida.
+
+
+2 Representação e coleção
+A equipe deverá criar um tipo estruturado para representar uma ficha. Também de-
+verá criar uma estrutura que represente o cadastro completo, contendo um vetor de
+personagens e a quantidade de posições atualmente ocupadas.
+
+Capacidade obrigatória
+O cadastro deverá suportar até 20 personagens. A capacidade deve ser declarada
+por uma constante simbólica, e não espalhada como número mágico pelo código.
+
+Exemplo conceitual de organização
+O trecho abaixo apenas ilustra a relação entre as informações. Ele não é uma solução
+pronta e não fixa nomes de tipos ou campos.
+
+ typedef struct {
+     /* campos de uma ficha */
+ } Personagem;
+
+ typedef struct {
+     Personagem itens[CAPACIDADE];
+     int quantidade;
+ } CadastroPersonagens;
+
+
+
+Decisões obrigatórias
+• usar tipos enumerados (enum) para representar classe, raça e tipo de item;
+• manter os registros ocupados de forma contígua no vetor;
+• proibir IDs repetidos;
+• não usar variáveis globais para armazenar o cadastro;
+• enviar o cadastro às funções por parâmetro.
+
+
+3 Itens e inventário
+Cada personagem deverá possuir um inventário com capacidade total de 50 espaços
+abstratos. Não será necessário representar peso, forma ou posição geométrica. Cada
+
+Algoritmos e Programação em C                                                    Página 2
+item informa apenas quantos espaços consome.
+Um item deverá possuir, no mínimo:
+
+  Campo                 Descrição                                       Restrições
+  ID                    Identificador do item                           Inteiro positivo e único
+                                                                        no personagem
+  Nome                  Nome pelo qual o item será exibido              1 a 49 caracteres úteis
+  Tipo                  Categoria e posição compatível                  Um dos tipos reconheci-
+                                                                        dos pelo programa
+  Espaços               Capacidade consumida no inven- Inteiro de 1 a 50
+                        tário
+  Bônus de ataque       Modificador ofensivo                            Inteiro; pode ser zero
+  Bônus de defesa       Modificador defensivo                           Inteiro; pode ser zero
+  Bônus de vida         Modificador dos PV máximos                      Inteiro; pode ser zero
+  Bônus de inicia- Modificador da ordem de ação                         Inteiro; pode ser zero
+  tiva
+  Poder                 Contribuição do item ao poder total             Inteiro não negativo
+
+Como todo item consome pelo menos um espaço, um vetor com 50 posições é sufi-
+ciente para representar o inventário. A quantidade de posições ocupadas no vetor e a
+quantidade de espaços consumidos são conceitos diferentes.
+
+                                              ∑
+                                         I.quantidade−1
+                         ocupacao(I) =                    I.itens[i].espacos
+                                              i=0
+
+Um item somente poderá ser acrescentado se a nova ocupação for menor ou igual a 50.
+A função que calcula a ocupação deverá percorrer os itens existentes; a solução não
+deve espalhar atualizações manuais de uma suposta carga total por todo o programa.
+
+Operações do inventário
+• adicionar um item, respeitando ID único e capacidade;
+• buscar um item por ID;
+• remover um item e manter os registros contíguos;
+• listar os itens, os espaços ocupados e os espaços livres;
+• informar a ocupação atual do inventário.
+
+
+4 Equipamentos e armas
+A ficha deverá conter posições fixas para os itens atualmente equipados:
+
+   Proteções e acessórios                           Armas
+   Elmo, peitoral, manoplas e calça                 Mão direita
+   Botas, anel, colar e cinto                       Mão esquerda
+
+Cada posição poderá estar vazia. Um item equipado deixa de ocupar espaço no inven-
+tário, mas continua pertencendo ao personagem. O mesmo item não poderá aparecer
+simultaneamente no inventário e em uma posição de equipamento.
+
+Algoritmos e Programação em C                                                              Página 3
+Compatibilidade
+O tipo do item determina onde ele pode ser equipado. Devem existir, no mínimo, os tipos
+ELMO, PEITORAL, MANOPLAS, CALCA, BOTAS, ANEL, COLAR, CINTO, ARMA_UMA_MAO e
+ARMA_DUAS_MAOS.
+Uma arma de duas mãos ocupa as duas mãos. Enquanto ela estiver equipada, nenhuma
+outra arma poderá ocupar a mão esquerda ou a mão direita.
+
+Equipar, desequipar e trocar
+Ao equipar, o item é retirado do inventário e colocado na posição compatível. Ao de-
+sequipar, retorna ao inventário e volta a consumir seus espaços. A operação deve ser
+recusada quando não houver capacidade suficiente.
+Se uma posição já estiver ocupada, a equipe poderá implementar a troca direta. Antes
+de modificar qualquer estrutura, o programa deverá verificar se o item antigo poderá
+retornar ao inventário. A operação deve ser atômica: ou todas as alterações acontecem,
+ou o estado permanece exatamente como estava.
+
+
+5 Atributos totais
+Os valores básicos pertencem à ficha; os equipamentos fornecem modificadores. Os
+valores totais deverão ser calculados por funções e não armazenados como cópias per-
+manentes:
+                                         ∑
+         ataque total = ataque base +        bônus de ataque dos itens equipados
+
+O mesmo princípio será aplicado à defesa, à iniciativa, aos pontos de vida máximos e
+ao poder. Itens guardados no inventário não concedem bônus.
+
+
+6 Operações obrigatórias
+
+   Operação                  Comportamento esperado
+   Inicializar               Preparar um cadastro vazio antes de qualquer outra oper-
+                             ação.
+   Cadastrar                 Validar a ficha, verificar capacidade e unicidade do ID e
+                             inserir no final.
+   Buscar por ID             Localizar um personagem e informar claramente quando
+                             ele não existir.
+   Alterar                  Substituir os dados de um personagem existente, preser-
+                            vando a unicidade do ID.
+   Remover                   Excluir o personagem e deslocar os elementos seguintes
+                             para eliminar o espaço vazio.
+   Listar                    Exibir todas as fichas cadastradas em formato legível.
+   Obter quantidade          Informar quantos personagens estão cadastrados.
+   Administrar       inven- Adicionar, localizar, remover e listar itens do personagem.
+   tário
+   Equipar       e   dese- Mover itens entre inventário e posições compatíveis.
+   quipar
+
+
+Algoritmos e Programação em C                                                      Página 4
+   Operação                 Comportamento esperado
+   Calcular atributos       Produzir ataque, defesa, iniciativa, PV máximos e poder
+                            totais.
+
+
+7 Interface do módulo
+A interface pública deverá ser declarada em personagem.h. A implementação das
+funções deverá ficar em personagem.c. O arquivo main.c deverá usar apenas os re-
+cursos publicados pela interface.
+A equipe deverá definir protótipos coerentes para todas as operações. As funções que
+modificam o cadastro deverão receber seu endereço. Operações que apenas consultam
+dados devem evitar alterações acidentais, utilizando const quando adequado.
+
+Códigos de retorno
+As funções não devem encerrar o programa ao encontrar um erro. Elas devem retornar
+um resultado que permita ao chamador distinguir, no mínimo:
+
+   Situação                      Exemplo
+   Sucesso                       Personagem cadastrado, alterado ou removido
+   Cadastro cheio                Não há posição disponível
+   ID duplicado                  Tentativa de cadastrar identificador existente
+   Não encontrado                Consulta, alteração ou remoção sem correspondên-
+                                 cia
+   Dados inválidos               Nível fora do intervalo ou nome vazio
+
+A forma concreta desses códigos também faz parte da modelagem. Uma boa solução
+pode usar outro enum para os estados da operação.
+Além das situações anteriores, a interface deverá distinguir inventário sem espaço, item
+incompatível com a posição, item não encontrado e conflito com arma de duas mãos.
+
+
+8 Programa de demonstração
+O arquivo main.c deverá apresentar um menu textual que permita executar todas as
+operações. O menu é um cliente do módulo; portanto, entrada e saída de dados não
+devem ser misturadas indiscriminadamente às funções do cadastro.
+
+Menu mínimo
+
+ 1 - Cadastrar personagem
+ 2 - Consultar personagem por ID
+ 3 - Alterar personagem
+ 4 - Remover personagem
+ 5 - Listar personagens
+ 6 - Administrar inventário
+ 7 - Consultar equipamentos
+ 8 - Equipar item
+ 9 - Desequipar item
+ 10 - Exibir atributos totais
+ 0 - Encerrar
+
+
+
+Algoritmos e Programação em C                                                     Página 5
+9 Regras de validação
+• Nenhuma ficha inválida poderá ser inserida ou usada para substituir uma ficha válida.
+• O nome não pode ser vazio nem ultrapassar a capacidade definida para a string.
+• A raça e a classe devem corresponder a uma opção efetivamente tratada pelo pro-
+  grama; os conjuntos mínimos não impedem extensões.
+• Os valores numéricos devem respeitar os intervalos da ficha.
+• Os pontos de vida atuais não podem superar os pontos de vida máximos.
+• Toda leitura textual deve evitar estouro de buffer. Não é permitido usar gets.
+• Entradas inválidas devem gerar mensagem clara e permitir que o programa continue.
+• O tamanho de cada item deve estar entre 1 e 50 espaços.
+• A soma dos espaços consumidos no inventário nunca pode ultrapassar 50.
+• Um item só pode ser equipado em posição compatível com seu tipo.
+• Um item equipado não pode continuar listado no inventário.
+• Armas de duas mãos devem bloquear simultaneamente as duas posições de arma.
+
+
+10 Casos mínimos de teste
+O programa de demonstração deverá permitir verificar, pelo menos, os casos abaixo. A
+equipe pode acrescentar outros testes.
+
+   Caso                                Resultado esperado
+   Cadastrar duas fichas válidas       Quantidade aumenta e ambas aparecem na
+                                       listagem
+   Repetir um ID                       Operação recusada; cadastro permanece inal-
+                                       terado
+   Buscar ID existente e inexis- Ficha correta no primeiro caso; mensagem no
+   tente                         segundo
+   Alterar ficha válida                Novos dados aparecem na consulta
+   Informar PV atuais maiores que      Operação recusada
+   PV máximos
+   Remover elemento do meio            Demais registros permanecem acessíveis e con-
+                                       tíguos
+   Preencher as 20 posições e ten- Operação recusada por falta de espaço
+   tar a 21ª
+   Adicionar itens que somam ex- Operação aceita; inventário informa 50/50
+   atamente 50 espaços
+   Adicionar item que faria a ocu- Operação recusada sem alterar o inventário
+   pação chegar a 51
+   Equipar item compatível             Item sai do inventário e aparece na posição cor-
+                                       reta
+   Equipar item incompatível           Operação recusada sem perda do item
+   Desequipar com         inventário   Operação recusada; item permanece equipado
+   sem capacidade
+
+
+Algoritmos e Programação em C                                                     Página 6
+   Caso                               Resultado esperado
+   Equipar arma de duas mãos          Ambas as mãos ficam ocupadas ou bloqueadas
+   Calcular atributos totais          Apenas bônus dos itens equipados são consider-
+                                      ados
+   Usar raça ou classe adicional      Cadastro, consulta e listagem tratam a opção
+   implementada                       corretamente
+
+
+11 Arquivos a entregar
+
+   Arquivo                  Conteúdo
+   item.h e item.c          Tipo do item, validações e operações diretamente rela-
+                            cionadas
+   inventario.h         e   Inventário, capacidade, busca, inserção e remoção
+   inventario.c
+   personagem.h             Ficha, equipamentos, constantes e protótipos públicos
+   personagem.c             CRUD, equipar, desequipar e atributos totais
+   main.c                   Menu e demonstração do módulo
+   README.txt               Identificação da equipe, instruções de compilação e de-
+                            cisões relevantes
+
+O projeto deverá compilar por um único comando informado no README. Sugestão:
+
+ gcc -std=c11 -Wall -Wextra -pedantic \
+     main.c personagem.c inventario.c item.c -o personagens
+
+
+
+
+12 Critérios de avaliação
+
+   Critério                                                        Peso sugerido
+   Modelagem da ficha, dos itens e do inventário                           20%
+   CRUD de personagens e inventário                                        20%
+   Equipamentos e cálculo de atributos totais                              20%
+   Validações e tratamento de erros                                        15%
+   Modularização e qualidade da interface                                  15%
+   Programa de demonstração e testes                                       5%
+   Clareza, legibilidade e compilação sem avisos                           5%
+
+
+13 Restrições
+• Não alterar a capacidade máxima exigida para contornar testes.
+• Não implementar tudo em main.c.
+• Não acessar diretamente detalhes internos do cadastro fora do módulo quando a
+  interface oferecer uma operação apropriada.
+• Não usar bibliotecas ou recursos externos que substituam as estruturas e algoritmos
+  pedidos.
+
+Algoritmos e Programação em C                                                    Página 7
+• Não antecipar persistência em arquivos ou combate nesta entrega.
+• Não representar a capacidade apenas pelo número de itens; devem ser somados os
+  espaços consumidos.
+• Não aplicar ao personagem bônus de itens que permanecem no inventário.
+
+
+14 Preparação para a próxima etapa
+O módulo criado aqui será reutilizado. Na Mini-Tarefa 2, outra estrutura representará
+os monstros e o bestiário será carregado de um arquivo. Mais tarde, o poder total dos
+personagens, incluindo seus equipamentos, ajudará a dimensionar os encontros.
+
+Uma solução correta para esta etapa não é apenas um menu que parece fun-
+cionar. É um módulo que protege seus dados, comunica erros e pode ser incor-
+porado ao sistema maior sem precisar ser refeito.
+
+
+
+
+Algoritmos e Programação em C                                                 Página 8
+

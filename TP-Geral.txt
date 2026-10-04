@@ -1,0 +1,134 @@
+    TRABALHO PRÁTICO
+
+
+
+    Sistema Auxiliar de Mestre de RPG
+    Enunciado geral e visão das quatro mini-tarefas
+
+
+     DISCIPLINA        Algoritmos e Programação em C
+
+     CURSO             Bacharelado em Ciência da Computação
+
+     PROJETO           Sistema Auxiliar de Mestre de RPG
+
+
+
+
+    Visão do projeto
+    Um sistema grande será construído por etapas pequenas, testáveis e reutilizáveis. Cada
+    entrega resolve uma parte do problema e prepara a próxima.
+
+
+
+
+    Objetivo
+    Desenvolver, em linguagem C, um programa que ajude o Mestre de RPG a administrar
+    aventureiros e monstros, preparar encontros coerentes e resolver os combates
+    resultantes. O sistema auxilia as decisões do Mestre; não procura substituí-lo.
+
+    Ao final do trabalho, o programa deverá:
+●    controlar as fichas dos personagens do grupo;
+●    carregar e consultar um bestiário com aproximadamente 50 criaturas;
+●    considerar grupo, dificuldade, ecossistema e período do dia;
+●    propor três encontros válidos para a escolha do Mestre;
+●    simular o combate escolhido e apresentar seu resultado.
+
+
+    Estratégia de desenvolvimento
+    O trabalho será dividido em quatro mini-tarefas. Cada uma terá enunciado próprio,
+    requisitos, exemplos, casos de teste e uma entrega parcial. As soluções anteriores
+    deverão ser preservadas e integradas nas etapas seguintes.
+
+    A estratégia ilustra o princípio de dividir para conquistar: compreender o problema
+    completo, decompor suas responsabilidades e combinar soluções menores em um único
+    sistema.
+
+
+
+
+Algoritmos e Programação em C                                                            Página 1
+ Mini-Tarefa 1 Os aventureiros
+ Será fornecido o layout da Ficha de Personagem. Os alunos deverão representá-la por
+ meio de struct, organizar um vetor de personagens e implementar operações para
+ cadastrar, localizar, alterar, remover e listar fichas. A solução deverá ser modular,
+ separando interface, implementação e programa de teste.
+
+ Mini-Tarefa 2 O bestiário
+ Será fornecido o layout da Ficha de Monstro e um arquivo textual com aproximadamente
+ 50 criaturas. Os alunos deverão criar a representação em C, carregar os registros do
+ arquivo e implementar as operações de consulta e manutenção do bestiário.
+
+ Mini-Tarefa 3 Algo se aproxima
+ O sistema receberá um grupo de aventureiros, a dificuldade pretendida, o ecossistema e
+ o período do dia. Usando o poder e os modificadores informados nas fichas dos
+ monstros, deverá produzir três propostas de encontro, válidas e preferencialmente
+ diferentes. O Mestre escolherá uma delas.
+
+ Mini-Tarefa 4 Rolem os dados
+ Serão fornecidas regras e tabelas de combate. Os alunos implementarão dados virtuais,
+ iniciativa, ataques, acertos, danos, atualização dos pontos de vida e encerramento do
+ confronto. A execução deverá gerar um relatório compreensível do combate.
+
+
+ Fluxo do sistema
+  1 Personagens             2 Bestiário          3 Encontros     4 Combate
+
+  Grupo de aventura         Criaturas do mundo   3 propostas     Resultado e relatório
+
+
+ As saídas de uma etapa tornam-se entradas da etapa seguinte. Portanto, organização,
+ nomes claros e interfaces bem definidas não são enfeites: são condições para que a
+ integração final funcione.
+
+
+
+
+Algoritmos e Programação em C                                                            Página 2
+    Visão funcional da etapa de encontros
+     Entrada                       Processamento                          Saída
+
+     Grupo de aventureiros         Filtrar criaturas possíveis Calcular   Três propostas de
+     Dificuldade Ecossistema Dia   poderes e modificadores Sortear        encontro Escolha do
+     ou noite                      composições válidas                    Mestre
+
+
+    A escolha aleatória será orientada por regras. O programa não deverá simplesmente
+    sortear uma criatura entre todas as existentes: primeiro determina quais criaturas
+    podem aparecer e qual faixa de poder é aceitável; só então utiliza a aleatoriedade.
+
+    Exemplo conceitual
+    Um goblin pode ter poder base 4, receber +1 à noite, +2 por goblin adicional e um
+    bônus extra para grupos numerosos. Assim, a mesma espécie pode produzir encontros
+    de forças diferentes conforme o lugar, o horário e a composição do grupo.
+
+
+    Integração final
+1    O Mestre seleciona os personagens que participarão da aventura.
+2    O sistema consulta o bestiário e recebe o contexto do encontro.
+3    Três propostas compatíveis são apresentadas.
+4    O Mestre escolhe uma proposta.
+5    O sistema executa o combate e produz o relatório final.
+
+
+    Regras gerais
+●    A implementação deve utilizar a linguagem C e respeitar a modularização exigida em
+     cada etapa.
+●    Não é necessário conhecer qualquer sistema comercial de RPG; todas as regras
+     necessárias serão fornecidas.
+●    Os módulos produzidos deverão ser reutilizados, e não reescritos, nas etapas
+     posteriores.
+●    Cada entrega deverá compilar sem avisos com as opções definidas pelo professor e
+     incluir um programa de demonstração.
+●    Detalhes de formato, interfaces, prazos e avaliação serão apresentados nos
+     enunciados específicos.
+
+
+    O Mestre possui um mundo inteiro para administrar. Vocês possuem um
+    problema para resolver. Dividam-no.
+
+
+
+
+Algoritmos e Programação em C                                                                   Página 3
+
